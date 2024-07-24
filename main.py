@@ -97,10 +97,6 @@ class Fish(pygame.sprite.Sprite):
         if self.image_index >= len(self.images):
             self.image_index = 0
         new_image = pygame.transform.rotate(self.images[int(self.image_index)], self.rotation)
-        # TODO check if this still makes sense after syncing
-        if self._is_facing_left():
-            pass
-            # new_image = pygame.transform.flip(new_image, False, True)
         self.image = new_image
 
     def _check_for_food(self):
@@ -117,7 +113,6 @@ class Fish(pygame.sprite.Sprite):
                 x = 0
             if abs(y) < FLOATING_POINT_OFFSET:
                 y = 0
-        print(x,y)
         y = -y
         self.rect.x += x
         self.rect.y += y
@@ -127,14 +122,17 @@ class Fish(pygame.sprite.Sprite):
 
     def _move(self):
         if self.state == IDLE:
+            print(self.rotation)
             if self.rotation == 180 or self.rotation == 0:
                 self._move_by()
             if self._is_facing_left():
                 self.rotation += (1 if 180 - self.rotation > 0 else -1) * min(self.rotation_speed,
                                                                               abs(180 - self.rotation))
             else:
-                self.rotation += (1 if 0 - self.rotation > 0 else -1) * min(self.rotation_speed,
+                self.rotation += (1 if self.rotation >= 270 else -1) * min(self.rotation_speed,
                                                                             abs(0 - self.rotation))
+                if self.rotation > 360:
+                    self.rotation = 0
 
             self._move_by()
 
