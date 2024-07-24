@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bf123bf0-2e35-4f25-9590-b193ff550a04" name="Changes" comment="improved sprites, removed food">
-      <change afterPath="$PROJECT_DIR$/assets/bubbles/bubble_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/bubbles/bubble_2.png" afterDir="false" />
+    <list default="true" id="bf123bf0-2e35-4f25-9590-b193ff550a04" name="Changes" comment="added bubbles">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -174,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721835654406</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added bubbles">
+      <option name="closed" value="true" />
+      <created>1721837640697</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1721837640697</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,10 +204,11 @@
     <MESSAGE value="fishies working in 2 directions" />
     <MESSAGE value="fishies working???" />
     <MESSAGE value="improved sprites, removed food" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved sprites, removed food" />
+    <MESSAGE value="added bubbles" />
+    <option name="LAST_COMMIT_MESSAGE" value="added bubbles" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/aquarium$main.coverage" NAME="main Coverage Results" MODIFIED="1721837367325" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/aquarium$main.coverage" NAME="main Coverage Results" MODIFIED="1721839472850" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/aquarium$test.coverage" NAME="test Coverage Results" MODIFIED="1721808949465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
