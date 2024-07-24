@@ -14,6 +14,8 @@ SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 600
 FPS = 60
 
+FLOATING_POINT_OFFSET = 1e-7
+
 # Colors
 WHITE = (255, 255, 255)
 
@@ -77,6 +79,9 @@ class Fish(pygame.sprite.Sprite):
                               self.detection_area)
         self.target = None
 
+    def _is_facing_left(self):
+        return abs(180 - self.rotation) < 90
+
     def _bounce_edges(self):
         if self.rect.left < BOUNCE_OFFSET or self.rect.right > SCREEN_WIDTH - BOUNCE_OFFSET:
             self.speed_x = -self.speed_x
@@ -88,15 +93,14 @@ class Fish(pygame.sprite.Sprite):
             self.speed_y = -self.speed_y
 
     def _update_animation(self):
-        print(self.rotation)
         self.image_index += self.animation_speed
         if self.image_index >= len(self.images):
             self.image_index = 0
         new_image = pygame.transform.rotate(self.images[int(self.image_index)], self.rotation)
         # TODO check if this still makes sense after syncing
-        if abs(self.rotation - 180) < 90:
-            #pass
-            new_image = pygame.transform.flip(new_image, False, True)
+        if self._is_facing_left():
+            pass
+            # new_image = pygame.transform.flip(new_image, False, True)
         self.image = new_image
 
     def _check_for_food(self):
@@ -105,37 +109,59 @@ class Fish(pygame.sprite.Sprite):
                 self.state = EAT
                 self.target = f
 
+    def _move_by(self, x=None, y=None):
+        if x is None or y is None:
+            x = math.cos(math.radians(self.rotation))
+            y = math.sin(math.radians(self.rotation))
+            if abs(x) < FLOATING_POINT_OFFSET:
+                x = 0
+            if abs(y) < FLOATING_POINT_OFFSET:
+                y = 0
+        print(x,y)
+        y = -y
+        self.rect.x += x
+        self.rect.y += y
+
+        self.food_rect.x += x
+        self.food_rect.y += y
+
     def _move(self):
         if self.state == IDLE:
-            if abs(180 - self.rotation) < 90:
+            if self.rotation == 180 or self.rotation == 0:
+                self._move_by()
+            if self._is_facing_left():
                 self.rotation += (1 if 180 - self.rotation > 0 else -1) * min(self.rotation_speed,
                                                                               abs(180 - self.rotation))
             else:
                 self.rotation += (1 if 0 - self.rotation > 0 else -1) * min(self.rotation_speed,
                                                                             abs(0 - self.rotation))
-            self.rect.x += self.speed_x
-            self.rect.y += self.speed_y
 
-            self.food_rect.x += self.speed_x
-            self.food_rect.y += self.speed_y
+            self._move_by()
 
         elif self.state == EAT:
             dist = pygame.Vector2(self.target.rect.center) - pygame.Vector2(self.rect.center)
+            dist.y = -dist.y
             if dist.length() != 0:
                 dist = dist.normalize()
             if DEBUG:
                 print(f"food vector: {dist}")
-            self.rect.x += dist.x
-            self.rect.y += dist.y
 
-            self.food_rect.x += dist.x
-            self.food_rect.y += dist.y
-
-            angle = -pygame.Vector2(1, 0).angle_to(dist)
+            raw_angle = pygame.Vector2(1, 0).angle_to(dist)
+            if raw_angle < 0:
+                angle = 360 + raw_angle
+            else:
+                angle = raw_angle
             is_negative = angle - self.rotation < 0
-            self.rotation += min(abs(angle - self.rotation), self.rotation_speed) * (-1 if is_negative else 1)
+            rotation_diff = min(abs(angle - self.rotation), self.rotation_speed) * (-1 if is_negative else 1)
+            # no negative rotation values
+            if self.rotation - rotation_diff < 0:
+                self.rotation = 360 - (self.rotation - rotation_diff)
+            else:
+                self.rotation += rotation_diff
             if DEBUG:
                 print(f"food angle: {angle}")
+
+            self._move_by()
 
     def _eat(self):
         if self.rect.colliderect(self.target.rect):
@@ -143,6 +169,8 @@ class Fish(pygame.sprite.Sprite):
             self.state = IDLE
 
     def update(self):
+        if self.target not in food_group:
+            self.state = IDLE
         # Update position
         self._move()
 
@@ -226,12 +254,12 @@ while running:
 
     # Draw
     screen.blit(background, (0, 0))
+    screen.blit(ground_image, ground_rect)
     fish_group.draw(screen)
     food_group.draw(screen)
     if DEBUG:
         for fish in fish_group:
             pygame.draw.rect(screen, WHITE, fish.food_rect)
-    screen.blit(ground_image, ground_rect)
 
     # Refresh screen
     pygame.display.flip()
