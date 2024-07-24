@@ -65,6 +65,8 @@ class Fish(pygame.sprite.Sprite):
         self.rect.x = random.randint(0, SCREEN_WIDTH - self.rect.width)
         self.rect.y = random.randint(0,
                                      SCREEN_HEIGHT - self.rect.height - ground_rect.height)  # Ensure fish doesn't start in the ground
+        self.rect.height = self.rect.height/2
+        self.rect.y += self.rect.height
         self.speed_x = random.choice([-1, 1])
         self.direction_x = self.speed_x
         self.speed_y = 0
@@ -217,7 +219,6 @@ class Food(pygame.sprite.Sprite):
         self._ground_collision()
 
         self._update_animation()
-
 
 # Sprite group
 fish_group = pygame.sprite.Group()
